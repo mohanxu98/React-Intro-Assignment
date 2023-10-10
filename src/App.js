@@ -19,7 +19,7 @@ function Board({ xIsNext, squares, onPlay }) {
     } else {
       nextSquares[i] = 'O';
     }
-    onPlay(nextSquares);
+    onPlay(nextSquares); //sending what the updated set of squares (board) looks like up to game function 
   }
 
   const winner = calculateWinner(squares);
@@ -53,14 +53,14 @@ function Board({ xIsNext, squares, onPlay }) {
 }
 
 export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove] = useState(0);
+  const [history, setHistory] = useState([Array(9).fill(null)]); //history is a updating-list of set of squares 
+  const [currentMove, setCurrentMove] = useState(0); //current move is the index to keep track of the version in history of boards
   const xIsNext = currentMove % 2 === 0;
-  const currentSquares = history[currentMove];
+  const currentSquares = history[currentMove]; //what the current board looks like 
 
   function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
+    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]; //updates history of boards by appending new version 
+    setHistory(nextHistory); //integrating that nextHistory officially into new history (like += )
     setCurrentMove(nextHistory.length - 1);
   }
 
@@ -68,7 +68,7 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
+  const moves = history.map((squares, move) => { //taking element and index of history 
     let description;
     if (move > 0) {
       description = 'Go to move #' + move;
@@ -80,15 +80,15 @@ export default function Game() {
         <button onClick={() => jumpTo(move)}>{description}</button>
       </li>
     );
-  });
+  }); // returns a list of buttons with available moves to go back to 
 
   return (
     <div className="game">
       <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} /> // onPlay triggered with each click, updating status here
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <ol>{moves}</ol> //this is generated everytime with a click re-rendered if something gets clicked 
       </div>
     </div>
   );
